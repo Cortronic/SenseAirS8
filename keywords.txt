@@ -1,0 +1,30 @@
+#######################################
+# Syntax Coloring Map SenseAirS8
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+SenseAirS8	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+getCO2	KEYWORD2
+getId	KEYWORD2
+getFirmwareVersion	KEYWORD2
+getABCPeriod	KEYWORD2
+setABCPeriod	KEYWORD2
+getABCPeriod	KEYWORD2
+setABCPeriod	KEYWORD2
+backgroundCalibration	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+XXXX_XXXX	LITERAL1
+
