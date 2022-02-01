@@ -62,7 +62,7 @@ void SenseAirS8::begin() {
 
 int16_t SenseAirS8::getCO2() {
 
-  _clrReceiveBuffer();
+  _clrRecvBuf();
   
   uint16_t co2 = _readInputRegister(0x03);
 #if S8_DEBUG    
@@ -94,7 +94,7 @@ uint16_t SenseAirS8::_getABCPeriod() {
 
 void SenseAirS8::setABCPeriod(uint16_t period) {
 
-  _clrReceiveBuffer();
+  _clrRecvBuf();
 
   _writeHoldingRegister(0x1F, period);
 
@@ -110,7 +110,7 @@ void SenseAirS8::setABCPeriod(uint16_t period) {
 bool SenseAirS8::backgroundCalibration() {
   uint16_t ack;
   
-  _clrReceiveBuffer();
+  _clrRecvBuf();
   
   // clear Acknowledgedment register
   if (_writeHoldingRegister(0x0000, 0x0000) == false) {
@@ -151,9 +151,9 @@ uint16_t SenseAirS8::_readInputRegister(uint8_t reg) {
   buf[6] = crc & 0xFF;     // crc low
   buf[7] = crc >> 8;       // crc high  
 
-  _writeModbus(buf, 8);
+  _sendModbus(buf, 8);
 
-  if (_readModbus(buf, 7) == false) {
+  if (_recvModbus(buf, 7) == false) {
     return 0xFFFF;
   }   
      
@@ -188,9 +188,9 @@ uint16_t SenseAirS8::_readHoldingRegister(uint8_t reg) {
   buf[6] = crc & 0xFF;     // crc low
   buf[7] = crc >> 8;       // crc high  
 
-  _writeModbus(buf, 8);
+  _sendModbus(buf, 8);
 
-  if (_readModbus(buf, 7) == false) {
+  if (_recvModbus(buf, 7) == false) {
     return 0xFFFF;
   }
   if (buf[2] != 2) {
@@ -224,9 +224,9 @@ bool SenseAirS8::_writeHoldingRegister(uint8_t reg, uint16_t val) {
   buf[6] = crc & 0xFF;     // crc low
   buf[7] = crc >> 8;       // crc high  
 
-  _writeModbus(buf, 8);
+  _sendModbus(buf, 8);
 
-  if (_readModbus(buf, 8) == false) {
+  if (_recvModbus(buf, 8) == false) {
     return false;
   }
 
@@ -256,7 +256,7 @@ bool SenseAirS8::_writeHoldingRegister(uint8_t reg, uint16_t val) {
 }
 
 
-bool SenseAirS8::_readModbus(uint8_t* buf, int len) {
+bool SenseAirS8::_recvModbus(uint8_t* buf, int len) {
   uint32_t timeout = millis() + 100; // 100 ms
   
   memset(buf, 0, len);
@@ -276,7 +276,7 @@ bool SenseAirS8::_readModbus(uint8_t* buf, int len) {
 }
 
 
-void SenseAirS8::_writeModbus(const byte* buf, int len) {
+void SenseAirS8::_sendModbus(const byte* buf, int len) {
   
   delay(5); 
   m_stream->write(buf, len);
@@ -303,7 +303,7 @@ uint16_t SenseAirS8::_modRTU_CRC(byte* buf, int len) {
   return crc;  
 }
 
-void SenseAirS8::_clrReceiveBuffer() {
+void SenseAirS8::_clrRecvBuf() {
   
   if (m_sw_serial) {
     m_sw_serial->end();

@@ -36,10 +36,10 @@ private:
   uint16_t        _readInputRegister(uint8_t reg);
   uint16_t        _readHoldingRegister(uint8_t reg);
   bool            _writeHoldingRegister(uint8_t reg, uint16_t val);
-  bool            _readModbus(byte* buf, int len);
-  void            _writeModbus(const byte* buf, int len);
+  bool            _recvModbus(byte* buf, int len);
+  void            _sendModbus(const byte* buf, int len);
   uint16_t        _modRTU_CRC(byte* buf, int len);
-  void            _clrReceiveBuffer();  
+  void            _clrRecvBuf();  
 };
 
 #endif  
